@@ -2,8 +2,8 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Recorridos del AST y Notación Polaca  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau  
+**Matrícula:** 24531402  
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
@@ -57,4 +57,4 @@ RESULTADO: n/n pruebas superadas
 > 
 
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** Emiliano Xooc Hau Ignacio Zaragoza

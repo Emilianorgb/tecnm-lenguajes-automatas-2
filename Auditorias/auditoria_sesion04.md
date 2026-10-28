@@ -54,7 +54,7 @@ RESULTADO: n/n pruebas superadas
 
 ### Reporte Crítico
 *¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
-La IA podía omitir el manejo de errores al trabajar con archivos, por ejemplo, cuando no se podía abrir un archivo o la ruta no existía. Lo solucioné comprobando si el archivo se abría correctamente y devolviendo -1 cuando ocurría un error.
+La IA omitió considerar el caso de un árbol nulo (NULL). Lo solucioné agregando una condición al inicio de la función evaluar() para que devolviera -1 cuando no recibiera un nodo válido, evitando acceder a memoria inválida.
 
 ---
 **Firma digital:** Emiliano Xooc Hau Ignacio Zaragoza

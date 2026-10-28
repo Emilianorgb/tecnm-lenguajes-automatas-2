@@ -2,8 +2,8 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Gestión en GitHub Web y Nodos Dinámicos  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau 
+**Matrícula:** 24531402  
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
@@ -54,7 +54,6 @@ RESULTADO: n/n pruebas superadas
 
 ### Reporte Crítico
 *¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
-> 
-
+La IA omitió comprobar algunos casos especiales al trabajar con los punteros. Lo solucioné revisando las condiciones necesarias antes de acceder o modificar los datos, para evitar errores durante la ejecución.
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** Emiliano Xooc Hau Ignacio Zaragoza

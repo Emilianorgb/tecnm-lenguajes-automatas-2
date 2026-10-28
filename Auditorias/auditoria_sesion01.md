@@ -54,7 +54,8 @@ RESULTADO: n/n pruebas superadas
 
 ### Reporte Crítico
 *¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
-> 
+La IA omitió el caso borde de evaluar un árbol nulo (NULL). Al principio, la función no contemplaba qué hacer cuando no recibía un nodo válido. Lo solucioné agregando una condición al inicio de evaluar para que, si el nodo es NULL, devuelva -1 y el programa no intente acceder a una dirección de memoria inválida. Después ejecuté las pruebas del auditor para comprobar que funcionara correctamente.
 
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** 
+Emiliano Xooc Hau Ignacio Zaragoza

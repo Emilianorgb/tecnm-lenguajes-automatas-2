@@ -2,8 +2,8 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Anatomía de un Árbol Sintáctico (AST)  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau  
+**Matrícula:** 24531402  
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
@@ -54,7 +54,7 @@ RESULTADO: n/n pruebas superadas
 
 ### Reporte Crítico
 *¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
-> 
+La IA podía omitir el manejo de errores al trabajar con archivos, por ejemplo, cuando no se podía abrir un archivo o la ruta no existía. Lo solucioné comprobando si el archivo se abría correctamente y devolviendo -1 cuando ocurría un error.
 
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** Emiliano Xooc Hau Ignacio Zaragoza

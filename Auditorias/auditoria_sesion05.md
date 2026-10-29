@@ -54,7 +54,7 @@ RESULTADO: n/n pruebas superadas
 
 ### Reporte Crítico
 *¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
-> 
+La IA omitió considerar el caso en que el árbol está vacío (NULL). Lo solucioné agregando una condición para verificar si el nodo es nulo antes de recorrerlo. Si el árbol no existe, la función deja el buffer como una cadena vacía, evitando errores y cumpliendo con lo que pide el auditor.
 
 ---
 **Firma digital:** Emiliano Xooc Hau Ignacio Zaragoza

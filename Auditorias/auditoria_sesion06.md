@@ -3,7 +3,9 @@
 **Tema:** Sistema de Tipos Primitivos  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
 **Estudiante:** Emiliano Xooc Hau
+
 **Matrícula:** 24531402
+
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---

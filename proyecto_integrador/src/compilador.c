@@ -127,9 +127,12 @@ int compilar(const char* ruta, const char* modo) {
         printf("\n");
     }
 
-    /* --check solamente comprueba el programa. */
     else if (strcmp(modo, "--check") == 0) {
-        /* No necesita imprimir nada. */
+        int errores = semantica_analizar(programa, ruta);
+
+        ast_liberar(programa);
+
+        return errores > 0 ? 1 : 0;
     }
 
     else {

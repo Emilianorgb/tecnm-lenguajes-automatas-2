@@ -64,6 +64,8 @@ typedef struct AST {
     struct AST* derecha;
     struct AST* tercero;
     struct AST** hijos;
+    int linea;
+    int columna;
     size_t cantidad_hijos;
 } AST;
 
@@ -77,6 +79,12 @@ void ast_liberar(AST* nodo);
 AST* parser_analizar(
     Token* tokens,
     size_t cantidad,
+    const char* ruta
+);
+
+/* Analizador semantico. */
+int semantica_analizar(
+    const AST* programa,
     const char* ruta
 );
 

@@ -105,6 +105,14 @@ static AST* primaria(Parser* p) {
 
     if (es_tipo(p, TOKEN_ID)) {
         nodo = ast_crear(AST_VAR, t->lexema);
+
+        if (nodo == NULL) {
+            return NULL;
+        }
+
+        nodo->linea = t->linea;
+        nodo->columna = t->columna;
+
         avanzar(p);
         return nodo;
     }
@@ -297,7 +305,8 @@ static AST* asignacion(Parser* p) {
     if (nodo == NULL) {
         return NULL;
     }
-
+    nodo->linea = actual(p)->linea;
+    nodo->columna = actual(p)->columna;
     avanzar(p);
 
     if (!consumir(p, "=", "se esperaba '='")) {

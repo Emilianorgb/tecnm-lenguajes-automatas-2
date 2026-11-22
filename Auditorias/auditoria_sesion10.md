@@ -2,15 +2,19 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Hito 1: Mini-Evaluador de Expresiones  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau  
+**Matrícula:** 24531402  
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Integración AST y Tipado Estático  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+Al realizar el evaluador manualmente, una de las principales dificultades fue organizar las operaciones para que se respetara la prioridad matemática. Por ejemplo, primero se deben resolver las multiplicaciones y divisiones antes que las sumas y restas.
+
+También fue necesario trabajar con funciones recursivas para reconocer los paréntesis y evaluar las expresiones correctamente.
+
+Durante la compilación encontré un problema porque faltaba incluir la biblioteca ctype.h, necesaria para utilizar las funciones isspace() e isdigit(). Al agregarla se corrigió ese error.
 > 
 
 ---
@@ -27,14 +31,44 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Actúa como un ingeniero de software especializado en compiladores.
+
+Necesito implementar en lenguaje C una función llamada
+evaluar_expresion para evaluar expresiones aritméticas.
+
+Debe aceptar:
+- Sumas y restas.
+- Multiplicaciones y divisiones.
+- Números negativos.
+- Paréntesis.
+- Espacios en blanco.
+
+Debe respetar la prioridad de las operaciones.
+
+El código debe detectar:
+- División entre cero, utilizando el error 1.
+- Sintaxis incorrecta, utilizando el error 2.
+
+Utiliza análisis recursivo y funciones auxiliares.
+No utilices eval ni bibliotecas externas.
+No incluyas una función main().
+Respeta la API proporcionada y permite compilar con GCC
+utilizando -Wall -Wextra -Werror.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+La IA propuso una solución basada en análisis recursivo. El programa utiliza funciones auxiliares para separar los factores, términos y expresiones.
+
+La implementación se encuentra en el archivo ia_sesion10_c.c.
+
+La función principal es:
+
+long evaluar_expresion(const char *fuente, int *error);
+
+Esta función recibe la expresión, realiza su evaluación y devuelve el resultado. Si encuentra un problema, establece el código de error correspondiente.
 ```
 
 ---
@@ -44,8 +78,72 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+Pruebas ejecutadas: 6 expresiones proporcionadas por el laboratorio.
+
+Salida del harness
+
+Se realizaron las siguientes pruebas:
+
+Prueba
+
+Expresión
+
+Resultado esperado
+
+1
+
+2+3*4
+
+14
+
+2
+
+(2+3)*4
+
+20
+
+3
+
+10/0
+
+Error 1
+
+4
+
+2+
+
+Error 2
+
+5
+
+ 7
+
+7
+
+6
+
+-5+10
+
+5
+
+Problemas encontrados durante la compilación:
+
+En Artesano apareció un error por no incluir ctype.h, que contiene las funciones isspace() e isdigit().
+
+En Científico apareció otro error porque se utilizó NULL sin incluir stddef.h.
+
+Se corrigieron ambos problemas agregando las bibliotecas correspondientes.
+
+=== AUDITORIA SESION 10 - Mini-evaluador de expresiones (Hito 1) ===
+Caso                               esperado:              obtenido:              resultado
+[ 1] "2+3*4"                            esperado: 14           obtenido: 14           OK
+[ 2] "(2+3)*4"                          esperado: 20           obtenido: 20           OK
+[ 3] "10/0" -> error 1                  esperado: 1            obtenido: 1            OK
+[ 4] "2+" -> error 2                    esperado: 2            obtenido: 2            OK
+[ 5] "  7 "                             esperado: 7            obtenido: 7            OK
+[ 6] "-5+10"                            esperado: 5            obtenido: 5            OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.
@@ -53,8 +151,12 @@ RESULTADO: n/n pruebas superadas
 * [ ] La complejidad teórica coincide con la implementada.
 
 ### Reporte Crítico
-*¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
+El principal problema detectado en las primeras compilaciones fue la falta de algunas bibliotecas necesarias. En Artesano faltaba ctype.h y en Científico faltaba stddef.h.
+
+Estos errores se identificaron al ejecutar el compilador con las opciones -Wall -Wextra -Werror, que permiten detectar advertencias y tratarlas como errores.
+
+La solución fue agregar las bibliotecas correspondientes sin modificar la lógica principal del evaluador.
 > 
 
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** Emiliano Xooc Hau

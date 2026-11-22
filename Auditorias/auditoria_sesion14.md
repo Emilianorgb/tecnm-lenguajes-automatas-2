@@ -2,15 +2,19 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Declaración vs Uso de Variables  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau  
+**Matrícula:** 24531402  
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Detección de variables no declaradas  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+Al realizar esta actividad, una de las dificultades fue controlar que una variable estuviera declarada antes de utilizarla. Para resolverlo, fue necesario crear una estructura que almacena los nombres de las variables registradas.
+
+También tuve que considerar qué sucede cuando se intenta declarar dos veces el mismo nombre. En ese caso, el programa debe detectar la redeclaración y evitar que se agregue nuevamente a la tabla.
+
+Para realizar las comparaciones utilicé la función strcmp(), que permite comprobar si dos nombres son exactamente iguales.
 > 
 
 ---
@@ -27,14 +31,41 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Actúa como un ingeniero de software especializado en compiladores.
+
+Necesito implementar un sistema para controlar la declaración
+y el uso de variables en lenguaje C.
+
+La implementación debe:
+- Permitir declarar nombres de variables.
+- Evitar que un nombre se declare dos veces.
+- Comprobar si una variable ya fue declarada antes de utilizarla.
+- Diferenciar nombres completos, por ejemplo x y xy.
+- Controlar parámetros NULL y nombres vacíos.
+- Respetar la API proporcionada.
+- No incluir una función main().
+- Compilar con GCC usando -Wall -Wextra -Werror.
+
+Entrega código modular y explica brevemente su funcionamiento.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+La IA propuso una solución basada en una tabla que almacena los nombres de las variables declaradas.
+
+Las funciones principales son:
+
+int declarar(Tabla *tabla, const char *nombre);
+
+int usar(const Tabla *tabla, const char *nombre);
+
+La función declarar() registra una variable si todavía no existe. Si el nombre ya está registrado, evita que se agregue nuevamente.
+
+La función usar() revisa si el identificador se encuentra dentro de la tabla. Si existe devuelve 1; si no existe devuelve 0.
+
+El código completo se encuentra en el archivo ia_sesion14_c.c.
 ```
 
 ---
@@ -44,8 +75,50 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+Pruebas ejecutadas: 6 casos relacionados con el uso antes de declarar y la redeclaración de variables.
+
+Casos revisados
+
+Prueba
+
+Descripción
+
+1
+
+Intentar utilizar una variable sin declararla.
+
+2
+
+Utilizar una variable después de declararla.
+
+3
+
+Intentar declarar dos veces el mismo nombre.
+
+4
+
+Comprobar que el total no aumente al redeclarar.
+
+5
+
+Comprobar que x y xy sean identificadores diferentes.
+
+6
+
+Intentar declarar un nombre vacío.
+
+Salida del harness
+
+=== AUDITORIA SESION 14 - Declaracion previa y redeclaracion ===
+Caso                               esperado:              obtenido:              resultado
+[ 1] usar sin declarar                  esperado: 0            obtenido: 0            OK
+[ 2] usar despues de declarar           esperado: 1            obtenido: 1            OK
+[ 3] redeclarar el mismo nombre         esperado: 0            obtenido: 0            OK
+[ 4] total tras redeclarar              esperado: 1            obtenido: 1            OK
+[ 5] prefijo no es el mismo nombre      esperado: 0            obtenido: 0            OK
+[ 6] declarar nombre vacio              esperado: -1           obtenido: -1           OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.
@@ -53,8 +126,12 @@ RESULTADO: n/n pruebas superadas
 * [ ] La complejidad teórica coincide con la implementada.
 
 ### Reporte Crítico
-*¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
+Uno de los casos importantes de esta actividad es diferenciar los nombres que solamente comparten algunas letras. Por ejemplo, x y xy deben considerarse variables diferentes.
+
+Para evitar errores en las comparaciones se utilizó strcmp(), que revisa el contenido completo de los nombres.
+
+También se consideró que una variable no puede utilizarse antes de haber sido declarada y que una redeclaración dentro de la misma tabla debe ser rechazada.
 > 
 
 ---
-**Firma digital:** [Usuario de GitHub]**
+**Firma digital:** Emiliano Xooc Hau

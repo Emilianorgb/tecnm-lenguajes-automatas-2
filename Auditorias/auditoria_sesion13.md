@@ -2,15 +2,19 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Manejo de Ámbitos (Scope Global/Local)  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau  
+**Matrícula:** 24531402  
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Pila de tablas de símbolos (Stack Scopes)  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+Al realizar esta actividad, una de las dificultades fue comprender cómo funciona la búsqueda de variables dentro de diferentes ámbitos. Por ejemplo, una variable puede estar declarada en el ámbito global y también en un bloque local.
+
+Para resolverlo utilicé una estructura enlazada mediante el campo padre, que permite recorrer los ámbitos desde el más cercano hasta el más externo.
+
+También tuve que considerar el ocultamiento de variables (shadowing), porque cuando dos ámbitos tienen una variable con el mismo nombre, debe tener prioridad la declaración que se encuentra en el ámbito más cercano.
 > 
 
 ---
@@ -27,14 +31,46 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Actúa como un ingeniero de software especializado en compiladores.
+
+Necesito implementar un sistema de ámbitos globales y locales
+en lenguaje C.
+
+La implementación debe:
+- Permitir declarar identificadores en un ámbito.
+- Evitar declaraciones duplicadas en el mismo ámbito.
+- Permitir el mismo nombre en ámbitos diferentes.
+- Implementar el ocultamiento de variables (shadowing).
+- Buscar identificadores desde el ámbito actual hacia sus padres.
+- Devolver el nombre del ámbito donde se encontró el identificador.
+- Controlar los parámetros NULL.
+- Respetar la API proporcionada.
+- No incluir una función main().
+- Compilar con GCC usando -Wall -Wextra -Werror.
+
+Entrega código modular y explica brevemente su funcionamiento.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+La IA propuso una implementación utilizando una estructura de ámbitos enlazados mediante un apuntador llamado padre.
+
+Las funciones principales son:
+
+int declarar(Ambito *ambito, const char *nombre);
+
+const char *buscar(
+    const Ambito *ambito,
+    const char *nombre
+);
+
+La función declarar() permite registrar identificadores en el ámbito actual y evita que se repitan dentro del mismo bloque.
+
+La función buscar() recorre los ámbitos desde el más cercano hasta el global, permitiendo encontrar la declaración correspondiente.
+
+El código completo se encuentra en el archivo ia_sesion13_c.c.
 ```
 
 ---
@@ -44,8 +80,49 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+Pruebas ejecutadas: 6 casos relacionados con la declaración y búsqueda jerárquica de identificadores.
+
+Casos revisados
+
+Prueba
+
+Descripción
+
+1
+
+Declarar una variable en un ámbito.
+
+2
+
+Buscar una variable en el mismo ámbito.
+
+3
+
+Buscar una variable declarada en el ámbito padre.
+
+4
+
+Comprobar el ocultamiento de una variable (shadowing).
+
+5
+
+Buscar una variable en tres niveles de ámbitos.
+
+6
+
+Comprobar que un identificador inexistente devuelva NULL.
+
+Salida del harness
+=== AUDITORIA SESION 13 - Pila de ambitos y busqueda jerarquica ===
+Caso                               esperado:              obtenido:              resultado
+[ 1] declarar(&g, "x")                  esperado: 1            obtenido: 1            OK
+[ 2] buscar en el mismo ambito          esperado: global       obtenido: global       OK
+[ 3] buscar subiendo al padre           esperado: global       obtenido: global       OK
+[ 4] shadowing en el hijo               esperado: bloque       obtenido: bloque       OK
+[ 5] tres niveles hasta la raiz         esperado: raiz         obtenido: raiz         OK
+[ 6] nombre no declarado                esperado: (nulo)       obtenido: (nulo)       OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.
@@ -53,8 +130,12 @@ RESULTADO: n/n pruebas superadas
 * [ ] La complejidad teórica coincide con la implementada.
 
 ### Reporte Crítico
-*¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
+Un punto importante de esta actividad fue comprobar que una variable declarada en un ámbito local pueda tener el mismo nombre que otra variable global.
+
+Al buscar ese identificador desde el ámbito local, debe encontrarse primero la declaración más cercana. Para conseguirlo, la búsqueda recorre la estructura desde el ámbito actual hacia los ámbitos superiores.
+
+También se debe revisar que no se permitan nombres duplicados dentro del mismo ámbito y que una búsqueda de un identificador inexistente devuelva NULL.
 > 
 
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** Emiliano Xooc Hau

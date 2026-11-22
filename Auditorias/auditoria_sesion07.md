@@ -2,15 +2,16 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Evaluación de Expresiones Aritméticas  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau.  
+**Matrícula:** 24531402.
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
-*Reto:* Evaluador recursivo de operaciones  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+En esta parte trabajé en un evaluador de operaciones matemáticas utilizando árboles sintácticos. La idea era que el programa pudiera resolver operaciones como sumas, restas, multiplicaciones y divisiones.
+
+Al principio tuve algunas dificultades para organizar las llamadas recursivas y comprobar que los nodos del árbol fueran válidos. También tenía que considerar qué hacer cuando se intentaba dividir entre cero.
 > 
 
 ---
@@ -27,14 +28,27 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Necesito que desarrolles un evaluador de expresiones
+aritméticas en lenguaje C utilizando árboles sintácticos.
+
+Respeta las funciones declaradas en api_sesion07.h.
+El programa debe evaluar sumas, restas, multiplicaciones,
+divisiones y módulos.
+
+También debe detectar la división entre cero, el módulo
+entre cero y los nodos NULL.
+
+No agregues una función main y utiliza código modular
+que pueda compilarse con GCC.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+En esta sección se incluye el código que generó la inteligencia artificial para el archivo ia_sesion07_c.c.
+
+La propuesta utiliza una función auxiliar para recorrer los nodos y realizar las operaciones. También comprueba los errores antes de continuar con la evaluación.
 ```
 
 ---
@@ -44,8 +58,23 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+Durante las pruebas aparecieron algunos problemas de compilación.
+
+En el archivo del Científico apareció un error porque se utilizaba NULL sin incluir la biblioteca correspondiente. Se solucionó agregando #include <stddef.h>.
+
+En el Artesano también apareció el mismo problema. Para corregirlo se agregó el encabezado necesario.
+
+Después de corregir el Científico, ejecuté nuevamente el auditor y obtuve los siguientes resultados:
+=== AUDITORIA SESION 07 - Evaluador recursivo con deteccion de errores ===
+
+[1] (2+3)*4          esperado: 20    obtenido: 20    OK
+[2] 7/0              esperado: 1     obtenido: 1     OK
+[3] 7%0              esperado: 1     obtenido: 1     OK
+[4] arbol NULL       esperado: 2     obtenido: 2     OK
+[5] 10-2-3           esperado: 5     obtenido: 5     OK
+[6] (8/2)+1          esperado: 5     obtenido: 5     OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.
@@ -53,8 +82,14 @@ RESULTADO: n/n pruebas superadas
 * [ ] La complejidad teórica coincide con la implementada.
 
 ### Reporte Crítico
-*¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
+Uno de los problemas que encontré fue que el código utilizaba NULL, pero no tenía incluido el encabezado stddef.h. Por ese motivo, el compilador no reconocía esa palabra y no permitía ejecutar el programa.
+
+Lo solucioné agregando #include <stddef.h> en el archivo correspondiente. También comprobé que el programa pudiera detectar una división entre cero, un módulo entre cero y un árbol vacío.
+
+Después de hacer las correcciones, el Científico pasó las seis pruebas del auditor.
+
+
 > 
 
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** Emiliano Xooc Hau

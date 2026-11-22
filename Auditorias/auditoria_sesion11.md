@@ -119,8 +119,16 @@ Intentar insertar en una tabla NULL.
 
 Salida del harness
 
-PENDIENTE: pegar aquí la salida real de Artesano y Científico.
-```
+=== AUDITORIA SESION 11 - Tabla hash con encadenamiento ===
+Caso                               esperado:              obtenido:              resultado
+[ 1] hash_djb2("")                      esperado: 5381         obtenido: 5381         OK
+[ 2] hash_djb2("abc")                   esperado: 193485963    obtenido: 193485963    OK
+[ 3] insertar x dos veces               esperado: 0            obtenido: 0            OK
+[ 4] dos claves, una cubeta             esperado: 2            obtenido: 2            OK
+[ 5] offset de beta en cadena           esperado: 4            obtenido: 4            OK
+[ 6] insertar en tabla NULL             esperado: -1           obtenido: -1           OK
+
+RESULTADO: 6/6 pruebas superadas```
 
 * [ ] Caso base y límites superados sin *Crash*.
 * [ ] No existen accesos fuera de límites ni *Memory Leaks*.

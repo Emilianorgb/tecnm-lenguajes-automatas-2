@@ -10,7 +10,11 @@
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Manipulación de archivos y llamadas OS  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+En esta actividad trabajé con archivos desde el lenguaje C. La idea era crear un archivo de texto, escribir información y después leerlo para saber cuántas líneas contiene.
+
+Una de las partes que más atención necesitó fue contar correctamente las líneas. Me di cuenta de que no basta con contar los saltos de línea, porque también puede existir una última línea que no termine con \n.
+
+Además, tuve que revisar que el archivo se abriera correctamente y cerrarlo después de utilizarlo. Si la ruta no existe o no se puede abrir el archivo, la función debe informar el error en lugar de continuar como si todo hubiera salido bien.
 > 
 
 ---
@@ -27,14 +31,50 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Necesito resolver una práctica de C relacionada con el manejo
+de archivos de texto.
+
+Quiero que desarrolles dos funciones: una para guardar texto
+en un archivo y otra para leerlo y contar cuántas líneas contiene.
+
+Las funciones deben llamarse escribir_texto y contar_lineas,
+y conservar exactamente las firmas del archivo api_sesion03.h.
+
+Hay algunos detalles que no quiero que se pasen por alto:
+
+- Si el archivo no se puede abrir, la función debe devolver -1.
+- Si ocurre un error al escribir o leer, también debe reportarlo.
+- Una línea debe contarse aunque no termine con un salto de línea.
+- Un archivo vacío debe devolver cero.
+- Los archivos deben cerrarse correctamente.
+- No agregues una función main porque el programa de pruebas
+  ya cuenta con una.
+
+Utiliza funciones estándar de C como fopen, fputs, fgetc
+y fclose. Quiero una solución clara, compatible con C99
+y que pueda compilarse con GCC usando -Wall -Wextra -Werror.
+
+Al terminar, explica brevemente cómo se realiza el conteo
+de líneas y cómo se manejan los errores.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+La IA presentó una solución dividida en dos funciones.
+
+La primera, escribir_texto(), se encarga de abrir el archivo en modo escritura y guardar el contenido recibido. Antes de hacerlo comprueba que los datos sean válidos y que el archivo se pueda abrir.
+
+La segunda, contar_lineas(), lee el archivo carácter por carácter. Cada vez que encuentra un salto de línea aumenta el contador. También revisa el último carácter leído para incluir una línea que no tenga salto de línea al final.
+
+Al terminar, ambas funciones comprueban los errores que pueden presentarse y cierran el archivo.
+
+Funciones principales:
+
+escribir_texto()
+
+contar_lineas()
 ```
 
 ---
@@ -44,8 +84,16 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+=== AUDITORIA SESION 03 - Archivos: escribir y contar lineas ===
+Caso                               esperado:              obtenido:              resultado
+[ 1] escribir_texto(...)==0             esperado: 0            obtenido: 0            OK
+[ 2] contar_lineas(3 lineas)            esperado: 3            obtenido: 3            OK
+[ 3] contar_lineas(sin salto final)     esperado: 2            obtenido: 2            OK
+[ 4] contar_lineas(archivo vacio)       esperado: 0            obtenido: 0            OK
+[ 5] contar_lineas(inexistente)         esperado: -1           obtenido: -1           OK
+[ 6] escribir_texto(ruta invalida)      esperado: -1           obtenido: -1           OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.

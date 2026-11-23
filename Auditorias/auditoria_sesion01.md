@@ -10,7 +10,11 @@
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Inversión de buffer in-place (char*)  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+En esta primera actividad trabajé con una función que permite invertir una cadena de texto sin utilizar otro arreglo para guardar los caracteres.
+
+Al principio puede parecer sencillo, pero la parte que requiere más atención es el uso de los punteros, porque hay que recorrer la cadena desde ambos extremos y cambiar los caracteres de lugar.
+
+También fue importante tener cuidado con las cadenas vacías y con los apuntadores que no contienen una dirección válida, para evitar errores al ejecutar el programa.
 > 
 
 ---
@@ -27,14 +31,37 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Quiero que me ayudes a resolver un ejercicio en lenguaje C.
+
+Tengo que crear una función que invierta una cadena de texto,
+pero hay una condición: no quiero utilizar otro arreglo para
+guardar el resultado. Quiero que los cambios se hagan directamente
+en la cadena original.
+
+Me gustaría que la solución utilice dos punteros:
+uno al inicio y otro al final de la cadena, para ir cambiando
+los caracteres hasta llegar al centro.
+
+También necesito que tomes en cuenta lo siguiente:
+- Que no falle si recibe NULL.
+- Que pueda trabajar con una cadena vacía.
+- Que funcione con cadenas pares e impares.
+- Que no utilice memoria adicional.
+- Que sea compatible con GCC y C99.
+
+Dame la función sin incluir main() y explícame
+de manera sencilla cómo funciona.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+La IA propuso utilizar dos punteros para realizar el intercambio de caracteres. Uno comienza en la primera posición de la cadena y el otro se coloca al final.
+
+Después, ambos avanzan hacia el centro mientras intercambian los caracteres que encuentran. El proceso termina cuando los punteros se encuentran o se cruzan.
+
+Lo interesante de esta solución es que no necesita crear otra cadena, porque modifica directamente la original.
 ```
 
 ---
@@ -44,8 +71,16 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+=== AUDITORIA SESION 01 - Inversion de buffer in-place ===
+Caso                               esperado:              obtenido:              resultado
+[ 1] invertir("HOLA")                   esperado: ALOH         obtenido: ALOH         OK
+[ 2] invertir("abc")                    esperado: cba          obtenido: cba          OK
+[ 3] invertir("")                       esperado:              obtenido:              OK
+[ 4] invertir("AB")                     esperado: BA           obtenido: BA           OK
+[ 5] invertir("a")                      esperado: a            obtenido: a            OK
+[ 6] invertir(NULL)                     esperado: sin crash    obtenido: sin crash    OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.

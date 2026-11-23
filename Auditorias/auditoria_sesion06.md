@@ -12,7 +12,11 @@
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Chequeo de compatibilidad de tipos  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+En esta actividad trabajé con una regla que utilizan los compiladores para saber si un dato puede asignarse a una variable de otro tipo.
+
+La parte que tuve que analizar fue el orden de los tipos. En este ejercicio se maneja la jerarquía CHAR < INT < FLOAT, por lo que se permite asignar un tipo pequeño a uno de mayor capacidad, pero no al contrario.
+
+Para resolverlo utilicé una comparación entre los valores de los tipos y agregué una condición para rechazar cualquier operación donde apareciera TIPO_ERROR. También implementé una función para obtener el nombre de cada tipo.
 > 
 
 ---
@@ -29,14 +33,53 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Estoy trabajando en la parte semántica de un compilador
+y necesito implementar una pequeña tabla de compatibilidad
+para los tipos primitivos.
+
+En mi proyecto tengo definidos estos tipos:
+TIPO_ERROR, TIPO_CHAR, TIPO_INT y TIPO_FLOAT.
+
+La jerarquía que estoy utilizando es:
+CHAR < INT < FLOAT.
+
+Necesito dos funciones:
+
+- compatible(destino, origen): indica si un valor de cierto
+  tipo puede asignarse a una variable de otro tipo.
+- nombre_tipo(t): devuelve el nombre correspondiente al tipo.
+
+La regla principal es que se permita asignar un tipo a otro
+del mismo rango o de mayor capacidad. Si el destino es más
+pequeño, debe rechazarse.
+
+También considera que TIPO_ERROR nunca debe ser compatible
+y que cada tipo debe devolver su nombre correcto.
+
+Respeta las declaraciones de api_sesion06.h, no cambies
+los parámetros y no agregues main().
+
+Quiero una solución sencilla en C que pueda compilarse
+con GCC sin generar advertencias.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+La IA presentó una solución que utiliza switch para revisar cada tipo de origen.
+
+En lugar de comparar directamente los valores numéricos de los tipos, establece las combinaciones que sí están permitidas. Por ejemplo, cuando el origen es TIPO_CHAR, permite asignarlo a CHAR, INT o FLOAT. Cuando el origen es TIPO_FLOAT, solamente permite asignarlo a otro FLOAT.
+
+La segunda función también utiliza switch para devolver el nombre de cada tipo. Si recibe un valor que no reconoce, devuelve "error".
+
+Funciones implementadas:
+
+compatible(Tipo destino, Tipo origen)
+
+nombre_tipo(Tipo t)
+
+Esta solución permite identificar de forma clara qué asignaciones están permitidas y cuáles deben rechazarse.
 ```
 
 ---
@@ -46,8 +89,16 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+=== AUDITORIA SESION 06 - Tabla de compatibilidad de tipos ===
+Caso                               esperado:              obtenido:              resultado
+[ 1] compatible(INT,INT)                esperado: 1            obtenido: 1            OK
+[ 2] compatible(FLOAT,INT)              esperado: 1            obtenido: 1            OK
+[ 3] compatible(INT,FLOAT)              esperado: 0            obtenido: 0            OK
+[ 4] compatible(INT,ERROR)              esperado: 0            obtenido: 0            OK
+[ 5] nombre_tipo(INT)                   esperado: int          obtenido: int          OK
+[ 6] nombre_tipo(ERROR)                 esperado: error        obtenido: error        OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.

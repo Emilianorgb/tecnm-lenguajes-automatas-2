@@ -10,7 +10,9 @@
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Lista enlazada de tokens en Heap  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+En esta práctica tuve que crear una lista que pudiera guardar tokens sin saber desde el principio cuántos elementos iba a necesitar. Lo que más trabajo me dio fue entender cómo agregar un nuevo nodo al final sin perder la conexión con los anteriores.
+
+También tuve que utilizar malloc para reservar memoria y revisar que la reserva se realizara correctamente. Otra parte importante fue recorrer la lista hasta encontrar el último nodo y dejar su puntero siguiente en NULL.
 > 
 
 ---
@@ -27,14 +29,49 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Estoy trabajando en una práctica de Lenguajes y Autómatas II
+y necesito implementar una lista enlazada para almacenar tokens.
+
+Quiero que me ayudes a desarrollar las siguientes funciones en C:
+
+1. agregar_token: recibe una lista y un lexema, crea un nuevo
+   nodo y lo coloca al final.
+2. contar_tokens: recorre la lista y devuelve cuántos nodos tiene.
+3. liberar_lista: libera todos los nodos reservados dinámicamente.
+
+Cada nodo debe guardar un lexema de máximo 15 caracteres
+más el carácter final '\0', y un puntero al siguiente nodo.
+
+Ten cuidado con estos detalles:
+- Utiliza malloc para crear los nodos.
+- Comprueba si malloc devuelve NULL.
+- No pierdas la cabeza de la lista al agregar elementos.
+- El último nodo debe apuntar a NULL.
+- Las funciones deben trabajar con una lista vacía.
+- Liberar una lista NULL no debe provocar errores.
+- Si el lexema es NULL, conserva la lista original.
+
+Respeta exactamente las funciones declaradas en api_sesion02.h.
+No agregues main() y utiliza código compatible con C99.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+La IA entregó una solución que utiliza memoria dinámica para crear cada nodo. Primero comprueba que el lexema sea válido, después reserva espacio con malloc y copia el texto al campo correspondiente.
+
+Cuando la lista ya tiene elementos, recorre los nodos utilizando siguiente hasta llegar al último. Ahí conecta el nuevo elemento.
+
+Las otras dos funciones tienen tareas más directas: contar_tokens recorre la lista y aumenta un contador, mientras que liberar_lista va guardando la dirección del siguiente nodo antes de liberar el actual con free.
+
+Funciones implementadas:
+
+agregar_token()
+
+contar_tokens()
+
+liberar_lista()
 ```
 
 ---
@@ -44,8 +81,16 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+=== AUDITORIA SESION 02 - Lista enlazada de tokens en heap ===
+Caso                               esperado:              obtenido:              resultado
+[ 1] agregar_token(NULL,"if")           esperado: if           obtenido: if           OK
+[ 2] contar_tokens(3 tokens)            esperado: 3            obtenido: 3            OK
+[ 3] orden: segundo token               esperado: dos          obtenido: dos          OK
+[ 4] ultimo->siguiente == NULL          esperado: 1            obtenido: 1            OK
+[ 5] contar_tokens(NULL)                esperado: 0            obtenido: 0            OK
+[ 6] liberar_lista(NULL)                esperado: sin crash    obtenido: sin crash    OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.

@@ -77,7 +77,8 @@ static AST* expresion(Parser* p);
 
 /* Crear un nodo binario. */
 static AST* crear_binaria(const char* operador,
-    AST* izquierda, AST* derecha) {
+    AST* izquierda, AST* derecha,
+    int linea, int columna) {
     AST* nodo = ast_crear(AST_BINARIA, operador);
 
     if (nodo == NULL) {
@@ -88,6 +89,8 @@ static AST* crear_binaria(const char* operador,
 
     nodo->izquierda = izquierda;
     nodo->derecha = derecha;
+    nodo->linea = linea;
+    nodo->columna = columna;
 
     return nodo;
 }
@@ -98,11 +101,18 @@ static AST* primaria(Parser* p) {
     AST* nodo = NULL;
 
     if (es_tipo(p, TOKEN_NUM)) {
-        nodo = ast_crear(AST_NUM, t->lexema);
-        avanzar(p);
-        return nodo;
+    nodo = ast_crear(AST_NUM, t->lexema);
+
+    if (nodo == NULL) {
+        return NULL;
     }
 
+    nodo->linea = t->linea;
+    nodo->columna = t->columna;
+
+    avanzar(p);
+    return nodo;
+}
     if (es_tipo(p, TOKEN_ID)) {
         nodo = ast_crear(AST_VAR, t->lexema);
 
@@ -177,6 +187,8 @@ static AST* multiplicativa(Parser* p) {
     }
 
     while (es_lexema(p, "*") || es_lexema(p, "/")) {
+        int linea = actual(p)->linea;
+        int columna = actual(p)->columna;
         char operador[2] = { actual(p)->lexema[0], '\0' };
         avanzar(p);
 
@@ -187,7 +199,9 @@ static AST* multiplicativa(Parser* p) {
             return NULL;
         }
 
-        izquierda = crear_binaria(operador, izquierda, derecha);
+        izquierda = crear_binaria(
+            operador, izquierda, derecha, linea, columna
+        );
 
         if (izquierda == NULL) {
             return NULL;
@@ -206,6 +220,8 @@ static AST* aditiva(Parser* p) {
     }
 
     while (es_lexema(p, "+") || es_lexema(p, "-")) {
+        int linea = actual(p)->linea;
+        int columna = actual(p)->columna;
         char operador[2] = { actual(p)->lexema[0], '\0' };
         avanzar(p);
 
@@ -216,7 +232,9 @@ static AST* aditiva(Parser* p) {
             return NULL;
         }
 
-        izquierda = crear_binaria(operador, izquierda, derecha);
+        izquierda = crear_binaria(
+            operador, izquierda, derecha, linea, columna
+        );
 
         if (izquierda == NULL) {
             return NULL;
@@ -238,6 +256,8 @@ static AST* comparacion(Parser* p) {
         es_lexema(p, ">") || es_lexema(p, ">=") ||
         es_lexema(p, "==") || es_lexema(p, "!=")) {
 
+        int linea = actual(p)->linea;
+        int columna = actual(p)->columna;
         char operador[3];
         snprintf(operador, sizeof(operador), "%s",
             actual(p)->lexema);
@@ -251,7 +271,9 @@ static AST* comparacion(Parser* p) {
             return NULL;
         }
 
-        izquierda = crear_binaria(operador, izquierda, derecha);
+        izquierda = crear_binaria(
+            operador, izquierda, derecha, linea, columna
+        );
     }
 
     return izquierda;
@@ -276,6 +298,8 @@ static AST* declaracion(Parser* p) {
     if (nodo == NULL) {
         return NULL;
     }
+nodo->linea = actual(p)->linea;
+nodo->columna = actual(p)->columna;
 
     avanzar(p);
 

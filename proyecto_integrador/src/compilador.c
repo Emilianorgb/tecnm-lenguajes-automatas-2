@@ -133,7 +133,19 @@ int compilar(const char* ruta, const char* modo) {
         ast_liberar(programa);
 
         return errores > 0 ? 1 : 0;
+    }else if (strcmp(modo, "--run") == 0) {
+    int errores = semantica_analizar(programa, ruta);
+
+    if (errores > 0) {
+        ast_liberar(programa);
+        return 1;
     }
+
+    int resultado = interprete_ejecutar(programa, ruta);
+
+    ast_liberar(programa);
+    return resultado;
+}
 
     else {
         fprintf(

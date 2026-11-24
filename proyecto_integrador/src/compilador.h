@@ -82,11 +82,16 @@ AST* parser_analizar(
     const char* ruta
 );
 
-/* Analizador semantico. */
+/* Analizador semántico. */
 int semantica_analizar(
     const AST* programa,
     const char* ruta
 );
 
-#endif /* COMPILADOR_H */
+/* Interprete del lenguaje. */
+int interprete_ejecutar(
+    const AST* programa,
+    const char* ruta
+);
 
+#endif /* COMPILADOR_H */

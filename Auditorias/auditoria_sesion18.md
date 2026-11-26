@@ -2,15 +2,15 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Arreglos y Verificación de Límites  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau  
+**Matrícula:** 24531402  
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Cálculo de tamaño de arreglo en memoria  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+Al realizar el ejercicio manualmente, tuve que identificar cuánto espacio ocupa cada tipo de dato y multiplicarlo por la cantidad de elementos del arreglo. También fue importante validar que no se recibieran cantidades negativas y comprobar que los índices estuvieran dentro del rango permitido.
 > 
 
 ---
@@ -27,14 +27,90 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Actúa como un ingeniero de software especializado en compiladores.
+Necesito implementar en lenguaje C dos funciones para trabajar
+con arreglos y verificar sus límites.
+
+La primera función debe calcular los bytes que ocupa un arreglo
+según el tipo de dato y el número de elementos.
+
+La segunda debe comprobar si un índice se encuentra dentro
+de los límites del arreglo.
+
+Considera los siguientes tamaños:
+char = 1 byte
+short = 2 bytes
+int = 4 bytes
+float = 4 bytes
+double = 8 bytes
+puntero = 8 bytes
+
+Las funciones deben validar los parámetros recibidos,
+rechazar tipos desconocidos y evitar índices negativos
+o iguales o mayores que el número de elementos.
+
+Utiliza C99, incluye las bibliotecas necesarias y respeta
+las firmas declaradas en api_sesion18.h.
+No agregues una función main.
+Entrega código modular y explica su complejidad.
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+#include "api_sesion18.h"
+#include <string.h>
+
+static int obtener_tamano(const char *tipo) {
+
+    if (tipo == NULL) {
+        return -1;
+    }
+
+    const char *tipos[] = {
+        "char", "short", "int",
+        "float", "double", "puntero"
+    };
+
+    const int tamanos[] = {
+        1, 2, 4, 4, 8, 8
+    };
+
+    for (int i = 0; i < 6; i++) {
+        if (strcmp(tipo, tipos[i]) == 0) {
+            return tamanos[i];
+        }
+    }
+
+    return -1;
+}
+
+long bytes_arreglo(const char *tipo, int elementos) {
+
+    if (elementos < 0) {
+        return -1;
+    }
+
+    int ancho = obtener_tamano(tipo);
+
+    if (ancho < 0) {
+        return -1;
+    }
+
+    return (long)ancho * elementos;
+}
+
+int indice_en_rango(int indice, int elementos) {
+
+    if (elementos <= 0) {
+        return 0;
+    }
+
+    return indice >= 0 && indice < elementos;
+}
+
+
 ```
 
 ---
@@ -44,8 +120,15 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+=== AUDITORIA SESION 18 - Tamano de arreglo y limites ===
+[ 1] int[10]                           esperado: 40   obtenido: 40   OK
+[ 2] double[3]                         esperado: 24   obtenido: 24   OK
+[ 3] int[-4]                           esperado: -1   obtenido: -1   OK
+[ 4] indice 0 de 5                     esperado: 1    obtenido: 1    OK
+[ 5] indice 5 de 5                     esperado: 0    obtenido: 0    OK
+[ 6] indice negativo                   esperado: 0    obtenido: 0    OK
+
+RESULTADO: 6/6 pruebas superadas
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.
@@ -53,8 +136,10 @@ RESULTADO: n/n pruebas superadas
 * [ ] La complejidad teórica coincide con la implementada.
 
 ### Reporte Crítico
-*¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
+Durante la revisión identifiqué que era necesario validar tanto el tipo de dato como la cantidad de elementos. Una cantidad negativa no debe producir un tamaño de memoria válido. También se debe rechazar un índice negativo o uno que sea igual al total de elementos, porque estaría fuera del arreglo.
+
+La implementación contempla estas condiciones y utiliza comparaciones directas para evitar accesos fuera de los límites.
 > 
 
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** Emiliano Xooc Hau

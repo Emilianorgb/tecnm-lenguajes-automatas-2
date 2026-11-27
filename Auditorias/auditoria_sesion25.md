@@ -2,15 +2,15 @@
 **Materia:** Lenguajes y Autómatas II (SCD-1016)  
 **Tema:** Control de Flujo: Bucles while y for  
 **Docente Titular:** MCC. Iván Márquez Larios (`ijmarquezl`)  
-**Estudiante:** [Nombre Completo]  
-**Matrícula:** [No. de Control]  
+**Estudiante:** Emiliano Xooc Hau  
+**Matrícula:** 24531402  
 **Track:** C (el harness evalúa C; la versión en Rust es opcional y no se califica con este harness)  
 
 ---
 
 ## 1. Fase 1: El Artesano (Dificultad Manual)
 *Reto:* Estructura de ciclo en instrucciones TAC  
-*Describe qué problema o restricción de memoria/sintaxis identificaste al codificar a mano:*
+Al realizar la implementación manual identifiqué que una de las dificultades fue controlar el orden de las instrucciones que forman un ciclo. También tuve que cuidar la capacidad del arreglo para no escribir fuera de sus límites. Otro punto importante fue manejar correctamente las etiquetas de inicio y final, evitando que se repitan cuando se generan varios ciclos.
 > 
 
 ---
@@ -27,14 +27,134 @@
 
 ### 2.2 Prompt Estructurado
 ```text
-[Pega aquí el prompt formal que redactaste para la IA]
+Actúa como un ingeniero de software especializado en compiladores.
+
+Necesito implementar en lenguaje C99 dos funciones para generar
+instrucciones TAC de ciclos while y for.
+
+La función emitir_while debe generar una etiqueta de inicio,
+una instrucción condicional IFFALSE, un salto GOTO al inicio
+y una etiqueta de salida.
+
+La función emitir_for debe considerar la inicialización,
+la etiqueta de inicio, la condición, la actualización del
+iterador, el salto de regreso y la etiqueta final.
+
+Las dos funciones deben respetar las firmas establecidas
+en el archivo api_sesion25.h.
+
+Valida los apuntadores, la capacidad máxima del arreglo y
+los argumentos recibidos. Evita escribir instrucciones
+incompletas si no existe espacio suficiente.
+
+Utiliza C99, funciones estándar y código modular.
+Incluye un análisis de complejidad temporal y espacial.
+
+
 ```
 
 ---
 
 ## 3. Código Devuelto por el Modelo
 ```c
-// Código devuelto por el LLM
+#include "api_sesion25.h"
+#include <stdio.h>
+#include <string.h>
+
+void emitir_while(char lineas[][64], int max, int *n,
+                  const char *cond, int *etiquetas) {
+
+    if (lineas == NULL || n == NULL || etiquetas == NULL ||
+        cond == NULL || max <= 0 || *n < 0 ||
+        *n > max || *n + 4 > max || *etiquetas < 0) {
+        return;
+    }
+
+    char temp[4][64];
+    int inicio = *etiquetas;
+    int fin = inicio + 1;
+    int r;
+
+    r = snprintf(temp[0], 64, "L%d:", inicio);
+    if (r < 0 || r >= 64) return;
+
+    r = snprintf(temp[1], 64, "IFFALSE %s GOTO L%d", cond, fin);
+    if (r < 0 || r >= 64) return;
+
+    r = snprintf(temp[2], 64, "GOTO L%d", inicio);
+    if (r < 0 || r >= 64) return;
+
+    r = snprintf(temp[3], 64, "L%d:", fin);
+    if (r < 0 || r >= 64) return;
+
+    for (int i = 0; i < 4; i++) {
+        strcpy(lineas[*n], temp[i]);
+        (*n)++;
+    }
+
+    *etiquetas += 2;
+}
+
+void emitir_for(char lineas[][64], int max, int *n,
+                const char *inicio, const char *cond,
+                const char *post, int *etiquetas) {
+
+    if (lineas == NULL || n == NULL || etiquetas == NULL ||
+        cond == NULL || max <= 0 || *n < 0 ||
+        *n > max || *etiquetas < 0) {
+        return;
+    }
+
+    int necesarias = 4;
+
+    if (inicio != NULL) necesarias++;
+    if (post != NULL) necesarias++;
+
+    if (*n + necesarias > max) return;
+
+    char temp[6][64];
+    int pos = 0;
+
+    int etiqueta_inicio = *etiquetas;
+    int etiqueta_fin = etiqueta_inicio + 1;
+    int r;
+
+    if (inicio != NULL) {
+        r = snprintf(temp[pos], 64, "%s", inicio);
+        if (r < 0 || r >= 64) return;
+        pos++;
+    }
+
+    r = snprintf(temp[pos], 64, "L%d:", etiqueta_inicio);
+    if (r < 0 || r >= 64) return;
+    pos++;
+
+    r = snprintf(temp[pos], 64,
+                 "IFFALSE %s GOTO L%d", cond, etiqueta_fin);
+    if (r < 0 || r >= 64) return;
+    pos++;
+
+    if (post != NULL) {
+        r = snprintf(temp[pos], 64, "%s", post);
+        if (r < 0 || r >= 64) return;
+        pos++;
+    }
+
+    r = snprintf(temp[pos], 64, "GOTO L%d", etiqueta_inicio);
+    if (r < 0 || r >= 64) return;
+    pos++;
+
+    r = snprintf(temp[pos], 64, "L%d:", etiqueta_fin);
+    if (r < 0 || r >= 64) return;
+    pos++;
+
+    for (int i = 0; i < pos; i++) {
+        strcpy(lineas[*n], temp[i]);
+        (*n)++;
+    }
+
+    *etiquetas += 2;
+}
 ```
 
 ---
@@ -44,8 +164,16 @@
 
 ### Salida del harness
 ```text
-Pega aquí la salida de la celda del harness. Debe terminar con:
-RESULTADO: n/n pruebas superadas
+=== AUDITORIA SESION 25 - Esqueleto TAC de while y for ===
+
+[1] while: marca de inicio       OK
+[2] while: condicion             OK
+[3] dos ciclos sin colision      OK
+[4] for: inicializacion          OK
+[5] for: actualizacion           OK
+[6] for sin post (NULL)          OK
+
+RESULTADO: 6/6 pruebas superadass
 ```
 
 * [ ] Caso base y límites superados sin *Crash*.
@@ -53,8 +181,10 @@ RESULTADO: n/n pruebas superadas
 * [ ] La complejidad teórica coincide con la implementada.
 
 ### Reporte Crítico
-*¿Qué caso borde o problema omitió la IA y cómo lo solucionaste?*
+Durante la primera compilación de la versión de IA apareció un error debido a que se había declarado una función auxiliar llamada agregar(), pero nunca se utilizaba. Como el compilador estaba configurado con -Werror, la advertencia se convirtió en un error y no permitió ejecutar las pruebas.
+
+Para solucionarlo eliminé esa función auxiliar y mantuve la generación de instrucciones directamente dentro de emitir_while() y emitir_for(). También se agregaron validaciones de capacidad y arreglos temporales para preparar las instrucciones antes de copiarlas al arreglo principal.
 > 
 
 ---
-**Firma digital:** [Usuario de GitHub]
+**Firma digital:** Emiliano Xooc Hau
